@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pos PKK - Events</title>
+    <link rel="icon" type="image/png" href="emak.png"/>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Pos PKK</a>
+                </div>
+                <div class="collapse navbar-collapse" id="nav">
+                    <ul class="nav navbar-nav">
+                        <!-- <li><a href="login.html">Member</a></li> -->
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="create.html">New Entry</a></li>
+                        <li><a href="event.html">New Event</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <h2>List Event</h2>
+        <div id="events" class="row"></div>
+
+        <hr>
+
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+   <!-- <script src="https://www.gstatic.com/firebasejs/6.2.1/firebase-app.js"></script> -->
+   <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var config = {
+    apiKey: "AIzaSyB7nJk3VodwmuchwCCVyphHDwxXPXGifmE",
+    authDomain: "pospkk.firebaseapp.com",
+    databaseURL: "https://pospkk.firebaseio.com",
+    projectId: "pospkk",
+    storageBucket: "pospkk.appspot.com",
+    messagingSenderId: "225984949722",
+    appId: "1:225984949722:web:96a581ab2163563c"
+  };
+        firebase.initializeApp(config);
+
+        /////////////////////////////////////
+
+        //Event purposes
+
+     var Acara = firebase.database().ref('Event').orderByChild('updatedAt');
+
+     Acara.on('value', function (a) {
+
+       $('#events').html('Loading...');
+             var html = '';
+             a.forEach(function (evento) {
+                 acara = evento.val()
+                 html = '<div class="col-md-6">' +
+                     '<a href="acara.html?id=' + evento.getKey() + '" style="text-decoration:none!important;">' +
+                     '<div class="panel panel-info">' +
+                     '<div class="panel-heading">' +
+                     '<h3 class="panel-title">' + excerpt(acara.title, 140) + '</h3>' +
+                     '</div>' +
+                     '<div class="panel-body">' +
+                     '<small>By ' + acara.author + ' | ' + datetimeFormat(acara.updatedAt) + ' | ' + acara.views + ' views</small>' +
+                     '<p><strong>'+acara.kegiatan+' '+acara.title+'</strong><br> Tanggal Acara: '+acara.date+'<br>Lokasi: '+acara.location+'</p>'
+                     '</div>' +
+                     '</div>' +
+                     '</a>' +
+                     '</div>' + html; // prepend the entry because we need to display it in reverse order
+                 //}
+             });
+
+             $('#events').html(html);
+         });
+
+        /*************\
+         * Utilities *
+        \*************/
+
+        function strip(html) {
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        function excerpt(text, length) {
+            text = strip(text);
+            text = $.trim(text); //trim whitespace
+            if (text.length > length) {
+                text = text.substring(0, length - 3) + '...';
+            }
+            return text;
+        }
+
+        function pad2Digit(num) {
+            return ('0' + num.toString()).slice(-2);
+        }
+
+        function datetimeFormat(timestamp) {
+            var dateObj = new Date(timestamp);
+            var en_month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return dateObj.getDate() + ' ' + en_month[dateObj.getMonth()] + ' ' + pad2Digit(dateObj.getFullYear()) + ' ' + pad2Digit(dateObj.getHours()) + ':' + pad2Digit(dateObj.getMinutes());
+        }
+    </script>
+
+
+</body>
+
+</html>

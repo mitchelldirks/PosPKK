@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pos PKK - Create - Event</title>
+    <link rel="icon" type="image/png" href="emak.png"/>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                   <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Pos PKK</a>
+                </div>
+                <div class="collapse navbar-collapse" id="nav">
+                    <ul class="nav navbar-nav">
+                        <!-- <li><a href="login.html">Member</a></li> -->
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="create.html">New Entry</a></li>
+                        <li><a href="event.html">New Event</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <form id="new_event">
+            <h2>Nama event</h2>
+            <input type="text" name="eventtitle" class="form-control col-md-12" required>
+            
+            <h2>Tanggal kegiatan</h2>
+            <input type="date" name="dateevent" class="form-control" required>
+
+            <h2>Jenis Kegiatan</h2>
+            <select name="kegiatan" class="form-control">
+                <option value="arisan">Arisan</option>
+                <option value="senam">Senam</option>
+                <option value="pengajian">Pengajian</option>
+                <option value="sedekah">Sedekah</option>
+            </select>
+            
+            <h2>Alamat Lokasi</h2>
+            <textarea name="location" class="form-control" required></textarea>
+
+            <h2>Keterangan</h2>
+            <textarea name="content" id="content" class="form-control"></textarea>
+            <br>
+            <div class="text-right">
+                <button class="btn btn-large btn-primary">Create new event</button>
+            </div>
+        </form>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+    <script src="//cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <!-- 
+    <script src="https://www.gstatic.com/firebasejs/6.2.1/firebase-app.js"></script> -->
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var config = {
+    apiKey: "AIzaSyB7nJk3VodwmuchwCCVyphHDwxXPXGifmE",
+    authDomain: "pospkk.firebaseapp.com",
+    databaseURL: "https://pospkk.firebaseio.com",
+    projectId: "pospkk",
+    storageBucket: "pospkk.appspot.com",
+    messagingSenderId: "225984949722",
+    appId: "1:225984949722:web:96a581ab2163563c"
+  };
+        firebase.initializeApp(config);
+
+        /////////////////////////////////////
+
+        
+                
+                // init CKEditor
+                CKEDITOR.replace('content');
+                
+                /***************************************************\
+                 * Process form data and save to Firebase database *
+                \***************************************************/
+                
+                $('#new_event').submit(function(e){
+                    e.preventDefault();
+                    
+                    var event = {};
+                    event.title = $(this).find('[name="eventtitle"]').val();
+                    event.date = $(this).find('[name="dateevent"]').val();
+                    event.kegiatan = $(this).find('[name="kegiatan"]').val();
+                    event.location = $(this).find('[name="location"]').val();
+                    event.content = CKEDITOR.instances['content'].getData();
+                    event.createdAt = new Date().getTime();
+                    event.updatedAt = event.createdAt;
+                    event.views = 0;
+                    event.author = "Agus";
+                    
+                    var Event = firebase.database().ref('Event');
+                    
+                    Event.push(event).then(function(data){
+                        window.location.href = 'event.html?id='+data.getKey()
+                    }).catch(function(error){
+                        alert(error);
+                        console.error(error);
+                    })
+                    
+                    return false;
+                });
+    </script>
+</body>
+</html>
