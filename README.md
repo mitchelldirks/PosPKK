@@ -1,6 +1,9 @@
 # PosPKK - FIREBASE CRUD APP
 
-Use: HTML, Js, Node.Js <br>
-Version: Beta v1.2
+<strong>Use</strong>: HTML, Js, Node.Js <br>
+<strong>Version</strong>: Beta v1.2
 
-Demo: <a>Unavailable</a>
+<strong>Demo</strong>: <a>Unavailable</a>
+
+<h1>Sample</h1>
+<?php include  'index.html'; ?>
