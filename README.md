@@ -5,5 +5,5 @@
 
 <strong>Demo</strong>: <a>Unavailable</a>
 
-<h1>Sample</h1>
+<!--<h1>Sample</h1>
 <?php include  'index.html'; ?>
